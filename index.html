@@ -32,6 +32,12 @@
             <input type="button" id="size_reset" value="サイズリセット" />
             <input type="hidden" id="pdf_width" />
             <input type="hidden" id="pdf_height" />
+            <input type="radio" id="resizable_both" name="resizable" value="both" checked />
+            <label for="resizable_both">縦横</label>
+            <input type="radio" id="resizable_vertical" name="resizable" value="vertical" />
+            <label for="resizable_vertical">縦</label>
+            <input type="radio" id="resizable_horizontal" name="resizable" value="horizontal" />
+            <label for="resizable_horizontal">横</label>
         </div>
         <div id="canvas_container">
             <canvas id="pdf_renderer"></canvas>
@@ -93,6 +99,19 @@
     document.getElementById('size_reset').addEventListener('click', (e) => {
         document.getElementById('canvas_container').style.width = document.getElementById('pdf_width').value + "px";
         document.getElementById('canvas_container').style.height = document.getElementById('pdf_height').value + "px";
+    });
+
+     // リサイズモード
+    var resizable = document.getElementsByName('resizable');
+    var resizables = Array.from(resizable);
+    resizables.forEach(function(target) {
+        target.addEventListener('change', () => {
+            document.getElementsByName('resizable').forEach(function(radio) {
+                if (radio.checked) {
+                    document.getElementById('canvas_container').style.resize = radio.value;
+                }
+            });
+        });
     });
 
     </script>
