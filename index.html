@@ -65,7 +65,11 @@
     // 次のPDFのページを表示
     document.getElementById('target_file')
     .addEventListener('change', (e) => {
-        url = e.target.value
+
+        var file_reader = new FileReader();
+
+        // ファイル内容をBase64にエンコードし、「data:〜」で始まるURL形式で取得
+        url = file_reader.readAsDataURL(e.target.files[0]);
 
         // PDFの読み込み
         pdfjsLib.getDocument(url).promise.then((pdf) => {
