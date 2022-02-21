@@ -65,17 +65,13 @@
     // 次のPDFのページを表示
     document.getElementById('target_file')
     .addEventListener('change', (e) => {
-        var img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.src = e.target.value;
-        img.onload = function() {
-            url = img.src
-            // PDFの読み込み
-            pdfjsLib.getDocument(url).promise.then((pdf) => {
-                state.pdf = pdf;
-                render();
-            });
-        };
+        url = e.target.value
+
+        // PDFの読み込み
+        pdfjsLib.getDocument(url).promise.then((pdf) => {
+            state.pdf = pdf;
+            render();
+        });
     });
 
     // 次のPDFのページを表示
