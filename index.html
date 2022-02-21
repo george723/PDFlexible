@@ -7,14 +7,21 @@
 <style>
 #canvas_container {
     /** pdf表示画面のCSS この辺りはカスタマイズしてください。 */
-    height: 100%;
+    height: 200px;
+    width: 200px;
     overflow: auto;
     background: #333;
     text-align: center;
     border: solid 3px;
+    resize: both;
+}
+#pdf_renderer {
+/*    display: none; */
+    height: 100%;
+    width: 100%;
 }
 </style>
-<script src="https://mozilla.github.io/pdf.js/build/pdf.js">
+<script src="http://mozilla.github.io/pdf.js/build/pdf.js">
 </script>
 </head>
 <body>
@@ -22,22 +29,16 @@
         <div id="canvas_container">
             <canvas id="pdf_renderer"></canvas>
         </div>
-        <div id="navigation_controls">
+        <div id="file_input">
             <input type="file" id="target_file" />
-            <button id="go_previous">Previous</button>
-            <button id="go_next">Next</button>
-            <button id="zoom_in">Zoom In</button>
-            <button id="zoom_out">Zoom Out</button>
         </div>
     </div>
     <script>
-    // 表示したいPDFのパスを指定
-    // https棟のURLでも可。ただしPDF配置サーバにCORSの設定をする必要あり。base64 encodeのPDFでも表示可能
-    var url = './pdf/sample.pdf';
+    var url;
     // PDF.js にアクセスするためのショートカット
     var pdfjsLib = window['pdfjs-dist/build/pdf'];
     // PDF.jsを使用するために「workerSrc」プロパティを指定する必要があるため指定
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'http://mozilla.github.io/pdf.js/build/pdf.worker.js';
     var state = {
         pdf: null,
         // 表示ページ
@@ -62,50 +63,24 @@
             });
         });
     }
-    // 次のPDFのページを表示
     document.getElementById('target_file')
     .addEventListener('change', (e) => {
 
         var file_reader = new FileReader();
 
+        file_reader.onload = function () {
+            url = file_reader.result
+
+            // PDFの読み込み
+            pdfjsLib.getDocument(url).promise.then((pdf) => {
+                state.pdf = pdf;
+                render();
+            });
+        }
         // ファイル内容をBase64にエンコードし、「data:〜」で始まるURL形式で取得
-        url = file_reader.readAsDataURL(e.target.files[0]);
-
-        // PDFの読み込み
-        pdfjsLib.getDocument(url).promise.then((pdf) => {
-            state.pdf = pdf;
-            render();
-        });
+        file_reader.readAsDataURL(e.target.files[0]);
     });
 
-    // 次のPDFのページを表示
-    document.getElementById('go_previous')
-    .addEventListener('click', (e) => {
-        if (state.pdf == null || state.currentPage == 1) return;
-        state.currentPage -= 1;
-        render();
-    });
-    // 前のPDFページを表示
-    document.getElementById('go_next')
-        .addEventListener('click', (e) => {
-           if (state.pdf == null || state.currentPage > state.pdf._pdfInfo.numPages) return;
-           state.currentPage += 1;
-           render();
-    });
-    // PDFのズームイン（拡大）
-    document.getElementById('zoom_in').addEventListener('click', (e) => {
-        if(state.pdf == null) return;
-        // + 0.5倍
-        state.zoom += 0.5;
-        render();
-    });
-     // PDFのズームアウト（拡小）
-    document.getElementById('zoom_out').addEventListener('click', (e) => {
-        if(state.pdf == null) return;
-        // - 0.5倍
-        state.zoom -= 0.5;
-        render();
-    });
     </script>
 </body>
 </html>
