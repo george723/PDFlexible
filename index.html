@@ -7,8 +7,8 @@
 <style>
 #canvas_container {
     /** pdf表示画面のCSS この辺りはカスタマイズしてください。 */
-    height: 200px;
-    width: 200px;
+/*     height: 200px;
+    width: 200px; */
     overflow: auto;
     background: #333;
     text-align: center;
@@ -28,6 +28,10 @@
     <div id="pdf_viewer">
         <div id="file_input">
             <input type="file" id="target_file" />
+            <br />
+            <input type="button" id="size_reset" value="サイズリセット" />
+            <input type="hidden" id="pdf_width" />
+            <input type="hidden" id="pdf_height" />
         </div>
         <div id="canvas_container">
             <canvas id="pdf_renderer"></canvas>
@@ -38,7 +42,7 @@
     // PDF.js にアクセスするためのショートカット
     var pdfjsLib = window['pdfjs-dist/build/pdf'];
     // PDF.jsを使用するために「workerSrc」プロパティを指定する必要があるため指定
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.js';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'http://mozilla.github.io/pdf.js/build/pdf.worker.js';
     var state = {
         pdf: null,
         // 表示ページ
@@ -56,6 +60,10 @@
             var viewport = page.getViewport({scale: state.zoom});
             canvas.width = viewport.width;
             canvas.height = viewport.height;
+            document.getElementById('canvas_container').style.width = viewport.width + "px";
+            document.getElementById('canvas_container').style.height = viewport.height + "px";
+            document.getElementById('pdf_width').value = viewport.width;
+            document.getElementById('pdf_height').value = viewport.height;
             // レンダリング
             page.render({
                 canvasContext: ctx,
@@ -79,6 +87,12 @@
         }
         // ファイル内容をBase64にエンコードし、「data:〜」で始まるURL形式で取得
         file_reader.readAsDataURL(e.target.files[0]);
+    });
+
+     // 表示領域リセット
+    document.getElementById('size_reset').addEventListener('click', (e) => {
+        document.getElementById('canvas_container').style.width = document.getElementById('pdf_width').value + "px";
+        document.getElementById('canvas_container').style.height = document.getElementById('pdf_height').value + "px";
     });
 
     </script>
