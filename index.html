@@ -28,7 +28,8 @@
     <div id="pdf_viewer">
         <div id="file_input">
             <input type="file" id="target_file" />
-            <br />
+        </div>
+        <div id="controller_input">
             <input type="button" id="size_reset" value="サイズリセット" />
             <input type="hidden" id="pdf_width" />
             <input type="hidden" id="pdf_height" />
@@ -38,6 +39,10 @@
             <label for="resizable_vertical">縦</label>
             <input type="radio" id="resizable_horizontal" name="resizable" value="horizontal" />
             <label for="resizable_horizontal">横</label>
+            <input type="button" id="vertical_plus" value="縦+" />
+            <input type="button" id="vertical_minus" value="縦-" />
+            <input type="button" id="horizontal_plus" value="横+" />
+            <input type="button" id="horizontal_minus" value="横-" />
         </div>
         <div id="canvas_container">
             <canvas id="pdf_renderer"></canvas>
@@ -112,6 +117,46 @@
                 }
             });
         });
+    });
+
+     // 縦+
+    document.getElementById('vertical_plus').addEventListener('click', (e) => {
+        var after_width = document.getElementById('canvas_container').style.width.replace('px', '');
+        var after_height = document.getElementById('canvas_container').style.height.replace('px', '');
+        after_width = after_width + 1;
+        after_height = after_height + 1;
+        document.getElementById('canvas_container').style.width = after_width + "px";
+        document.getElementById('canvas_container').style.height = after_height + "px";
+    });
+
+     // 縦-
+    document.getElementById('vertical_minus').addEventListener('click', (e) => {
+        var after_width = document.getElementById('canvas_container').style.width .replace('px', '');
+        var after_height = document.getElementById('canvas_container').style.height.replace('px', '');
+        after_width = after_width - 1;
+        after_height = after_height - 1;
+        document.getElementById('canvas_container').style.width = after_width + "px";
+        document.getElementById('canvas_container').style.height = after_height + "px";
+    });
+
+     // 横+
+    document.getElementById('horizontal_plus').addEventListener('click', (e) => {
+        var after_width = document.getElementById('canvas_container').style.width.replace('px', '');
+        var after_height = document.getElementById('canvas_container').style.height.replace('px', '');
+        after_width = after_width + 1;
+        after_height = after_height + 1;
+        document.getElementById('canvas_container').style.width = after_width + "px";
+        document.getElementById('canvas_container').style.height = after_height + "px";
+    });
+
+     // 横-
+    document.getElementById('horizontal_minus').addEventListener('click', (e) => {
+        var after_width = document.getElementById('canvas_container').style.width.replace('px', '');
+        var after_height = document.getElementById('canvas_container').style.height.replace('px', '');
+        after_width = after_width - 1;
+        after_height = after_height - 1;
+        document.getElementById('canvas_container').style.width = after_width + "px";
+        document.getElementById('canvas_container').style.height = after_height + "px";
     });
 
     </script>
