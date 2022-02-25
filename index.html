@@ -43,6 +43,7 @@
             <input type="button" id="vertical_minus" value="縦-" />
             <input type="button" id="horizontal_plus" value="横+" />
             <input type="button" id="horizontal_minus" value="横-" />
+            <input type="button" id="rotate_canvas" value="90°回転" />
         </div>
         <div id="canvas_container">
             <canvas id="pdf_renderer"></canvas>
@@ -59,7 +60,9 @@
         // 表示ページ
         currentPage: 1,
         // 倍率 1.0は1倍
-        zoom: 1.0
+        zoom: 1.0,
+        // 0
+        rotate: 0
     }
 
     // PDFをレンダリングするファンクション
@@ -147,6 +150,29 @@
         document.getElementById('canvas_container').style.width = after_width + "px";
     });
 
+     // 回転
+    document.getElementById('rotate_canvas').addEventListener('click', (e) => {
+        state.pdf.getPage(state.currentPage).then(function(page) {
+        	state.rotate = state.rotate + 90
+            var canvas  = document.getElementById("pdf_renderer");
+            var context = canvas.getContext("2d");
+            var viewport = page.getViewport({scale: state.zoom, rotation: state.rotate});
+            var width  = canvas.width;
+            var height = canvas.height;
+
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            document.getElementById('canvas_container').style.width = viewport.width + "px";
+            document.getElementById('canvas_container').style.height = viewport.height + "px";
+            document.getElementById('pdf_width').value = viewport.width;
+            document.getElementById('pdf_height').value = viewport.height;
+            // レンダリング
+            page.render({
+                canvasContext: context,
+                viewport: viewport
+            });
+        });
+    });
     </script>
 </body>
 </html>
