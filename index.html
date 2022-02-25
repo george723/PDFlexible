@@ -9,6 +9,7 @@
     /** pdf表示画面のCSS この辺りはカスタマイズしてください。 */
     height: 200px;
     width: 200px;
+    scrollbar-width: none;
     overflow: scroll;
     background: #333;
     display: flex;
@@ -31,6 +32,7 @@
         </div>
         <div id="controller_input">
             <input type="button" id="size_reset" value="サイズリセット" />
+            <input type="button" id="rotate_canvas" value="90°回転" />
             <input type="hidden" id="pdf_width" />
             <input type="hidden" id="pdf_height" />
             <input type="radio" id="resizable_both" name="resizable" value="both" checked />
@@ -43,7 +45,7 @@
             <input type="button" id="vertical_minus" value="縦-" />
             <input type="button" id="horizontal_plus" value="横+" />
             <input type="button" id="horizontal_minus" value="横-" />
-            <input type="button" id="rotate_canvas" value="90°回転" />
+            <input type="button" id="resizable_lock" value="サイズ固定" />
         </div>
         <div id="canvas_container">
             <canvas id="pdf_renderer"></canvas>
@@ -172,6 +174,19 @@
                 viewport: viewport
             });
         });
+    });
+
+     // サイズ固定
+    document.getElementById('resizable_lock').addEventListener('click', (e) => {
+        var mode = document.getElementById('resizable_lock').value;
+        if (mode == "サイズ固定") {
+            document.getElementById('canvas_container').style.resize = "none";
+            document.getElementById('resizable_lock').value= "サイズ変更";
+        }
+        else {
+            document.getElementById('canvas_container').style.resize = "both";
+            document.getElementById('resizable_lock').value= "サイズ固定";
+        }
     });
     </script>
 </body>
