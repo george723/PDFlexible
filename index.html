@@ -62,7 +62,7 @@
         // 表示ページ
         currentPage: 1,
         // 倍率 1.0は1倍
-        zoom: 1.0,
+        zoom: 5.0,
         // 0
         rotate: 0
     }
@@ -76,8 +76,10 @@
             var viewport = page.getViewport({scale: state.zoom});
             canvas.width = viewport.width;
             canvas.height = viewport.height;
-            document.getElementById('canvas_container').style.width = viewport.width + "px";
-            document.getElementById('canvas_container').style.height = viewport.height + "px";
+            var stylewidth = viewport.width / 5;
+            var styleheight = viewport.height / 5;
+            document.getElementById('canvas_container').style.width = stylewidth + "px";
+            document.getElementById('canvas_container').style.height = styleheight + "px";
             document.getElementById('pdf_width').value = viewport.width;
             document.getElementById('pdf_height').value = viewport.height;
             // レンダリング
@@ -164,8 +166,10 @@
 
             canvas.width = viewport.width;
             canvas.height = viewport.height;
-            document.getElementById('canvas_container').style.width = viewport.width + "px";
-            document.getElementById('canvas_container').style.height = viewport.height + "px";
+            var stylewidth = viewport.width / 5;
+            var styleheight = viewport.height / 5;
+            document.getElementById('canvas_container').style.width = stylewidth + "px";
+            document.getElementById('canvas_container').style.height = styleheight + "px";
             document.getElementById('pdf_width').value = viewport.width;
             document.getElementById('pdf_height').value = viewport.height;
             // レンダリング
